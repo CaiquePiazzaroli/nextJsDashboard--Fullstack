@@ -6,7 +6,6 @@ import { lusitana } from '@/app/ui/fonts';
 import Image from 'next/image';
 
 export default function Page() {
-  console.log("Teste:" + lusitana.className);
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
@@ -30,7 +29,8 @@ export default function Page() {
           </Link>
         </div>
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
-          {/* Add Hero Images Here */}
+        
+          {/* Componentes de Imagem do Next.js Otimizadas  */}
           <Image
             src="/hero-desktop.png"
             width={1000}

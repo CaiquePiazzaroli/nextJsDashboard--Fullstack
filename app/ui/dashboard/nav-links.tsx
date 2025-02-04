@@ -8,6 +8,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
+import { userAgent } from 'next/server';
 
 
 // Map of links to display in the side navigation.
@@ -23,7 +24,11 @@ const links = [
 ];
 
 export default function NavLinks() {
+
+  // Hook do next que permite ler a url atual
   const pathname = usePathname();
+  console.log("Caminho: " + pathname);
+  
   return (
     <>
       {links.map((link) => {

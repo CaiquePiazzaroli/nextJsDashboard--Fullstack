@@ -14,6 +14,7 @@ const iconMap = {
   invoices: InboxIcon,
 };
 
+// Componente que 'envelopa o conteudo em um grupo'
 export default async function CardWrapper() {
   const {
     numberOfInvoices,

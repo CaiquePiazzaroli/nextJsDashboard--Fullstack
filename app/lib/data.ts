@@ -1,4 +1,6 @@
+// Biblioteca para realizar queries em um DB postgres
 import postgres from 'postgres';
+
 import {
   CustomerField,
   CustomersTableType,
@@ -62,6 +64,7 @@ export async function fetchCardData() {
          SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
          FROM invoices`;
 
+    // Envia todas as promisses de uma vez só em paralelo 
     const data = await Promise.all([
       invoiceCountPromise,
       customerCountPromise,
@@ -73,6 +76,7 @@ export async function fetchCardData() {
     const totalPaidInvoices = formatCurrency(data[2][0].paid ?? '0');
     const totalPendingInvoices = formatCurrency(data[2][0].pending ?? '0');
 
+    // Retorna todos os requests no baco de uma só vez na forma de um objeto
     return {
       numberOfCustomers,
       numberOfInvoices,
