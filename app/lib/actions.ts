@@ -107,7 +107,9 @@ export async function authenticate(
 ): Promise<string | undefined> {
   try {
     await signIn('credentials', formData);
-    return undefined; // sucesso
+    const redirectTo = formData.get('redirectTo')?.toString() || '/dashboard';
+    redirect(redirectTo);
+    return undefined;
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
