@@ -60,7 +60,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
   } catch (error) {
     // If a database error occurs, return a more specific error.
     return {
-      message: error,
+      message: `Database Error: Failed to Create Invoice. ${error}`,
     };
   }
  
@@ -102,7 +102,6 @@ export async function deleteInvoice(id: string) {
 }
 
 export async function authenticate(
-  prevState: string | undefined,
   formData: FormData,
 ) {
   try {
