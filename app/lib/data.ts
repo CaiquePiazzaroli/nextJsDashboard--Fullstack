@@ -1,6 +1,4 @@
-// Biblioteca para realizar queries em um DB postgres
 import postgres from 'postgres';
-
 import {
   CustomerField,
   CustomersTableType,
@@ -11,6 +9,7 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 
+
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 export async function fetchRevenue() {
@@ -18,10 +17,13 @@ export async function fetchRevenue() {
     // Artificially delay a response for demo purposes.
     // Don't do this in production :)
 
-    console.log('Fetching revenue data...');
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // console.log('Fetching revenue data...');
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
 
+    //Retorna uma lista de objetos ex { month: 'Jul', revenue: 3500 }
     const data = await sql<Revenue[]>`SELECT * FROM revenue`;
+    
+    //console.log(data);
 
     // console.log('Data fetch completed after 3 seconds.');
 
@@ -34,12 +36,15 @@ export async function fetchRevenue() {
 
 export async function fetchLatestInvoices() {
   try {
+    //Retorna uma lista de objetos de invoices
     const data = await sql<LatestInvoiceRaw[]>`
       SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
       FROM invoices
       JOIN customers ON invoices.customer_id = customers.id
       ORDER BY invoices.date DESC
       LIMIT 5`;
+
+    //console.log(data);
 
     const latestInvoices = data.map((invoice) => ({
       ...invoice,
@@ -54,9 +59,6 @@ export async function fetchLatestInvoices() {
 
 export async function fetchCardData() {
   try {
-    // You can probably combine these into a single SQL query
-    // However, we are intentionally splitting them to demonstrate
-    // how to initialize multiple queries in parallel with JS.
     const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
     const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
     const invoiceStatusPromise = sql`SELECT
@@ -64,19 +66,17 @@ export async function fetchCardData() {
          SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
          FROM invoices`;
 
-    // Envia todas as promisses de uma vez só em paralelo 
     const data = await Promise.all([
       invoiceCountPromise,
       customerCountPromise,
       invoiceStatusPromise,
     ]);
 
-    const numberOfInvoices = Number(data[0].count ?? '0');
-    const numberOfCustomers = Number(data[1].count ?? '0');
+    const numberOfInvoices = Number(data[0][0].count ?? '0');
+    const numberOfCustomers = Number(data[1][0].count ?? '0');
     const totalPaidInvoices = formatCurrency(data[2][0].paid ?? '0');
     const totalPendingInvoices = formatCurrency(data[2][0].pending ?? '0');
 
-    // Retorna todos os requests no baco de uma só vez na forma de um objeto
     return {
       numberOfCustomers,
       numberOfInvoices,
@@ -163,7 +163,7 @@ export async function fetchInvoiceById(id: string) {
       // Convert amount from cents to dollars
       amount: invoice.amount / 100,
     }));
-
+    console.log(invoice);
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);

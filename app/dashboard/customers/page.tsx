@@ -1,3 +1,5 @@
-export default function Pustomers() {
-    return <p>Page customers</p>
+export default function page(){
+    return (
+        <p>Customers page</p>
+    )
 }

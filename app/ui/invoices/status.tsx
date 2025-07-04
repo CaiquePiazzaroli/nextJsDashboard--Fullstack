@@ -18,7 +18,6 @@ export default function InvoiceStatus({ status }: { status: string }) {
           <ClockIcon className="ml-1 w-4 text-gray-500" />
         </>
       ) : null}
-      
       {status === 'paid' ? (
         <>
           Paid

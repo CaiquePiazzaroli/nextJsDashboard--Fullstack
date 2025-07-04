@@ -26,6 +26,7 @@ export type Invoice = {
   status: 'pending' | 'paid';
 };
 
+//Define os tipos de dados que irão ser recebidos do banco
 export type Revenue = {
   month: string;
   revenue: number;
