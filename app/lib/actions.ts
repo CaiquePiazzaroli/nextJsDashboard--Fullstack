@@ -102,10 +102,12 @@ export async function deleteInvoice(id: string) {
 }
 
 export async function authenticate(
-  formData: FormData,
-) {
+  _prevState: string | undefined,
+  formData: FormData
+): Promise<string | undefined> {
   try {
     await signIn('credentials', formData);
+    return undefined; // sucesso
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -115,6 +117,6 @@ export async function authenticate(
           return 'Something went wrong.';
       }
     }
-    throw error;
+    return 'Something went wrong.';
   }
 }
